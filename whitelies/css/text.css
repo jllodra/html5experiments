@@ -1,0 +1,74 @@
+p {
+    font-family: 'Give You Glory', cursive;
+
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;   
+    white-space: nowrap;
+    position: absolute;
+    z-index: 1000;    
+    
+    text-shadow: 0 0 24px #999, 0 0 4px #333, 1px 1px 10px #CCC;
+    opacity: 0;
+    -webkit-transition: all 2.5s ease-in-out;        
+    -webkit-box-reflect: below -10px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.4, transparent), to(white));  
+    -moz-transition: all 2.5s ease-in-out;        
+    -moz-box-reflect: below -10px -moz-gradient(linear, left top, left bottom, from(transparent), color-stop(0.4, transparent), to(white));     
+    -o-transition: all 2.5s ease-in-out;        
+    -o-box-reflect: below -10px -o-gradient(linear, left top, left bottom, from(transparent), color-stop(0.4, transparent), to(white));     
+    -ms-transition: all 2.5s ease-in-out;        
+    -ms-box-reflect: below -10px -ms-gradient(linear, left top, left bottom, from(transparent), color-stop(0.4, transparent), to(white));     
+    transition: all 2.5s ease-in-out;        
+    box-reflect: below -10px gradient(linear, left top, left bottom, from(transparent), color-stop(0.4, transparent), to(white));     
+
+    left: 50%;
+    top: 50%;    
+    color: white;
+    font-size: 24px;
+}
+
+p:hover {
+    cursor: default !important;
+}
+
+p.show {
+    opacity: 1 !important;
+}
+
+p.hide {
+    opacity: 0 !important;
+}
+
+p._0 {
+    -webkit-transform: rotate(10deg) translateX(300px) scale(3.1); 
+    -moz-transform: rotate(10deg) translateX(300px) scale(3.1); 
+    -o-transform: rotate(10deg) translateX(300px) scale(3.1); 
+    -ms-transform: rotate(10deg) translateX(300px) scale(3.1); 
+    transform: rotate(10deg) translateX(300px) scale(3.1); 
+}
+
+p._0_ {
+    -webkit-transform: translateY(-300px) scale(1);    
+    -moz-transform: translateY(-300px) scale(1);    
+    -o-transform: translateY(-300px) scale(1);    
+    -ms-transform: translateY(-300px) scale(1);    
+    transform: translateY(-300px) scale(1);    
+}
+
+p._1 {
+    -webkit-transform: rotate(-20deg) translateY(-100px) translateX(300px) scale(3.1); 
+    -moz-transform: rotate(-20deg) translateY(-100px) translateX(300px) scale(3.1); 
+    -o-transform: rotate(-20deg) translateY(-100px) translateX(300px) scale(3.1); 
+    -ms-transform: rotate(-20deg) translateY(-100px) translateX(300px) scale(3.1); 
+    transform: rotate(-20deg) translateY(-100px) translateX(300px) scale(3.1); 
+}
+
+p._1_ {
+    -webkit-transform: translateY(100px) translateX(300px) scale(1);    
+    -moz-transform: translateY(100px) translateX(300px) scale(1);    
+    -o-transform: translateY(100px) translateX(300px) scale(1);    
+    -ms-transform: translateY(100px) translateX(300px) scale(1);    
+    transform: translateY(100px) translateX(300px) scale(1); 
+}

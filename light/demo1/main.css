@@ -1,0 +1,47 @@
+html {
+    height: 100%;
+    font-family: Georgia, sans-serif;
+}
+body {
+    height: 100%;
+    margin: 0 auto; padding: 0;
+    text-alignt: center;
+    background-color: black;
+    overflow: hidden;
+}
+#light {
+    /* Made with http://www.colorzilla.com/gradient-editor/ by Alex Sirota */
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgb(153,153,153); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%, rgba(0,0,0,0) 50%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(255,255,255,1)), color-stop(50%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(0,0,0,0) 50%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(0,0,0,0) 50%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(0,0,0,0) 50%); /* IE10+ */
+    background: radial-gradient(center, ellipse cover,  rgba(255,255,255,1) 0%,rgba(0,0,0,0) 50%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aaaaaa', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+}
+#content {
+    text-align: center;
+    z-index: -1;
+}
+h1 { 
+    margin: 400px 0 0 0; padding: 0;
+    color: gray;
+}
+#social {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    height: 40px;
+    z-index: 30;
+}

@@ -1,0 +1,14 @@
+#video {
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+}
+
+.scanlines {
+    mask-box-image: url(../images/scanlines.png) 0 0 repeat;
+    -o-mask-box-image: url(../images/scanlines.png) 0 0 repeat;
+    -ms-mask-box-image: url(../images/scanlines.png) 0 0 repeat;
+    -moz-mask-box-image: url(../images/scanlines.png) 0 0 repeat;
+    -webkit-mask-box-image: url(../images/scanlines.png) 0 0 repeat;
+}

@@ -1,0 +1,87 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <title>html5 experiment with White lies - Bigger than us</title>
+        <meta name="description" content="html5 with white lies by josep llodra">
+        <meta name="author" content="josep llodra">
+
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/welcome.css">
+        <link rel="stylesheet" href="css/button.css">
+        <link rel="stylesheet" href="css/log.css">
+        <link rel="stylesheet" href="css/video.css">
+        <link rel="stylesheet" href="css/text.css">
+        <link rel="stylesheet" href="css/bar.css">
+
+        <link href='http://fonts.googleapis.com/css?family=Give+You+Glory' rel='stylesheet' type='text/css'>
+
+    </head>
+
+    <body>
+
+        <div id="welcome">
+            <span>html5/css3 experiment for Google Chrome 15+ (hardware accel) with White Lies</span><br/><br/>
+            <button id="button" class="super button blue hidden">Please wait...</button><br/><br/>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="herotyc"></a>
+            <!-- Place this render call where appropriate -->
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone size="medium"></g:plusone><br/><br/>
+            <!--<a href="#">or watch on youtube</a><br/><br/>-->
+            <img class="reflect" src="images/poster4.png"/>
+            <img class="reflect" src="images/poster2.png"/><br/><br/><br/><br/>
+            <span style="font-size: 9px">jlg.hrtc@gmail.com</span>
+        </div> 
+
+        <script src="js/libs/jquery-git-min.js"></script>
+
+        <script src="js/wl.js"></script>
+        <script src="js/wl.queue.js"></script>
+        <script src="js/wl.sequencer.js"></script>
+        <script src="js/wl.text.js"></script>
+        <script src="js/wl.bar.js"></script>
+        <script src="js/wl.mouse.js"></script>
+        <script src="js/wl.keyboard.js"></script>
+        
+        <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+        <script type="text/javascript">
+            (function() {
+                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-2057916-3'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+                g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+                s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                WL.log("content ready");
+                if($.browser.webkit) {
+                    WL.log("webkit detected");
+                    $('#button').toggleClass('hidden');
+                    $('body').append('<video id="video" class="hidden" preload>'+
+                        '<source src="video/video.webm" type="video/webm" />' +
+                        'Your browser does not support the video tag.' +
+                        '</video>');
+                    WL.initialize(0);
+                }
+            }, false);
+        </script>
+
+    </body>
+    
+</html>
