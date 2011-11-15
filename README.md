@@ -8,7 +8,7 @@ whitelies
 
 3d css video with White Lies - Bigger than us
 
-	* http://herotyc.untergrund.net/whitelies
+ * (http://herotyc.untergrund.net/whitelies)
 
 lights
 ------
