@@ -20,12 +20,14 @@ css tricks to create spotlights
  * http://herotyc.untergrund.net/light/demo2
  * http://herotyc.untergrund.net/light/demo3
 
-fft
----
+fft / darkfastft / firering
+---------------------------
 
-fast Fourier transform with chrome's webaudio api + three.js
+fast Fourier transform experiments with chrome's webaudio api + three.js
 
  * http://herotyc.untergrund.net/fft
+ * http://herotyc.untergrund.net/darkfastft
+ * http://herotyc.untergrund.net/firering
 
 --- 
 
