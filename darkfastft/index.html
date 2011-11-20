@@ -3,10 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>fft web audio api chrome + threejs</title>
-        
-        <!-- hay que respetar las costumbres -->
-        
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+
         <script type="text/javascript" src="Three.js"></script>
 
         <style>
@@ -27,7 +24,7 @@
 
     <body>
         <div id="header">
-            web audio api + three.js (any key stops audio) <br/><br/>
+            web audio api + three.js (song: kitaro - a drop of silence) <br/><br/>
             <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="josep_llodra"></a>
             <g:plusone size="medium"></g:plusone><br/><br/>
             <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
@@ -51,7 +48,7 @@
             
             var MAIN = {};
             
-            $(document).ready(function() {
+                
                 if ( !window.requestAnimationFrame ) {
                     window.requestAnimationFrame = ( function() {
                         return window.webkitRequestAnimationFrame ||
@@ -65,44 +62,49 @@
                 }
                 
                 MAIN.start = function() {
+                    FFT.initialize();
                     GFX.initialize();
-                    //FFT.initialize('song.mp3');
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", 'kitaro.mp3', true);
+                    xhr.responseType = "arraybuffer";
+                    xhr.onload = function() {
+                        FFT.source.buffer = FFT.context.createBuffer(xhr.response, false);
+                        FFT.source.loop = true;
+                        FFT.source.noteOn(0);
+                        window.webkitRequestAnimationFrame(MAIN.doFFT);
+                    };
+                    xhr.send();
                 }
                                 
                 MAIN.doFFT = function(time) {
-                    /*var min, color, tcolor;
     
                     FFT.analyser.getByteFrequencyData(FFT.freqByteData);
-                    if(FFT.freqByteData[FFT.band] > 240) { // sens
-                        GFX.mesh.scale.x = FFT.freqByteData[FFT.band] / 96;
-                    } else {
-                        GFX.mesh.scale.x = FFT.freqByteData[FFT.band] / 128;            
-                    }
-                    GFX.mesh.scale.y = GFX.mesh.scale.x;
-                    GFX.mesh.scale.z = GFX.mesh.scale.x;
 
-                    min = 128;
-                    if(FFT.freqByteData[FFT.band] < 192) {
-                        color = 0.3;
-                    } else { //192..255   0,3 1
-                        color = (0.7/63)*(FFT.freqByteData[FFT.band]-192)+0.3;
-                    }
+                    var i = FFT.analyser.frequencyBinCount;
+                    var avg = 0;
+                    var data = FFT.freqByteData[64];
+                    GFX.light1.intensity = data / 255;
 
-                    tcolor = new THREE.Color();
-                    tcolor.setRGB(color, color, color);
-                    GFX.mesh.materials[0].color = tcolor;*/
+
+                    while(i-- && i < 1024) {
+                        data = FFT.freqByteData[i];
+                        particle = GFX.particles.vertices[i];
+                        particle.position.z = -data * 2.5;
+                        avg += data;
+                    }
+                    
+                    avg = avg / 1024;
+                    var color = new THREE.Color();
+                    color.setRGB(data/255, data/255, data/255)
+                    GFX.particleSystem.materials[0].color = color;
 
                     GFX.render();
 
                     window.webkitRequestAnimationFrame(MAIN.doFFT);
                 }
 
-                MAIN.start();
-                
-                // temporalmente
-                window.webkitRequestAnimationFrame(MAIN.doFFT);
+                MAIN.start();               
 
-            });
         </script>
     </body>
 

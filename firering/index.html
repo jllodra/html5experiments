@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>fft web audio api chrome + threejs</title>
+
+        <script type="text/javascript" src="Three.js"></script>
+
+        <style>
+            body {
+                overflow: hidden;
+                background-color: #000000;
+                font-family: Helvetica, Sans-serif;
+                color: #eee;
+                text-align: center;
+            }
+            #header {
+                position: absolute;
+                width: 100%;
+                z-index: 10;
+            }
+            a {
+                color: slategray;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="header">
+            web audio api + three.js (song by <a href="http://vausspaceship.blogspot.com/" target="_blank">sergio de prado</a>) - KEYS 1/2/3 to switch camera<br/><br/>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="josep_llodra"></a>
+            <g:plusone size="medium"></g:plusone><br/><br/>
+            <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+            <script type="text/javascript">
+                (function() {
+                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                    po.src = 'https://apis.google.com/js/plusone.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                })();
+            </script>
+            <script>
+                var _gaq=[['_setAccount','UA-2057916-3'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
+                (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+                    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+                    s.parentNode.insertBefore(g,s)}(document,'script'));
+            </script>
+        </div>
+        <script type="text/javascript" src="gfx.js"></script>
+        <script type="text/javascript" src="fft.js"></script>
+        <script>
+            
+            var MAIN = {};
+                            
+            if ( !window.requestAnimationFrame ) {
+                window.requestAnimationFrame = ( function() {
+                    return window.webkitRequestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        window.oRequestAnimationFrame ||
+                        window.msRequestAnimationFrame ||
+                        function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+                        window.setTimeout( callback, 1000 / 60 );
+                    };
+                } )();
+            }
+                
+            MAIN.start = function() {
+                FFT.initialize();
+                GFX.initialize();
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", 'srg.mp4', true);
+                xhr.responseType = "arraybuffer";
+                xhr.onload = function() {
+                    FFT.source.buffer = FFT.context.createBuffer(xhr.response, false);
+                    FFT.source.loop = true;
+                    FFT.source.noteOn(0);
+                    window.requestAnimationFrame(MAIN.doFFT);
+                };
+                xhr.send();
+            }
+                                
+            MAIN.doFFT = function(time) {
+    
+                FFT.analyser.getByteFrequencyData(FFT.freqByteData);
+
+                var avg = 0;
+                var data = 0;
+                    
+                var i = 832;
+                while(i--) {
+                    data = FFT.freqByteData[i];
+                    particle = GFX.particleSystem.geometry.vertices[i];
+                    particle.position.y = data * 2;
+                    avg += data;
+                }
+
+                avg = avg / 832;
+                var color = new THREE.Color();
+                color.setRGB(avg/255, (176-avg)/255, 0);
+                GFX.particleSystem.materials[0].color = color;
+
+                GFX.render();
+
+                window.requestAnimationFrame(MAIN.doFFT);
+            }
+
+            MAIN.start();               
+
+        </script>
+    </body>
+
+</html>
+

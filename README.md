@@ -2,6 +2,7 @@ html5 experiments
 =================
 
 Some interactive experiments written in html5 technologies: audio/video, webgl and css3.
+Use Chrome stable, might work on other browsers.
 
 whitelies
 ---------

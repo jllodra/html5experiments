@@ -10,40 +10,46 @@ GFX.plane_geometry = null;
 GFX.plane_material = null;
 GFX.plane_mesh = null;
 GFX.light1 = null;
-GFX.light2 = null;
 
-GFX.initialize = function() {
+GFX.particleCount = 1024;
+GFX.particles = null;
+GFX.particlesMaterial = null;
+GFX.particleSystem = null;
+
+GFX.initialize = function() {   
     
-
     GFX.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     GFX.camera.position.z = 1000;
-
+    
     GFX.scene = new THREE.Scene();
-    //GFX.scene.add( new THREE.AmbientLight( 0x888888 ) );
+    GFX.scene.add( new THREE.AmbientLight( 0x888888 ) );
     
     GFX.cube_geometry = new THREE.CubeGeometry( 200, 200, 200, 8, 8 );
     GFX.plane_geometry = new THREE.PlaneGeometry(8000, 4000, 8, 8);
     
-    GFX.cube_material = new THREE.MeshPhongMaterial( {ambient: 0x333333, color: 0xffffff, specular: 0xffffff, shininess: 200} );
-    GFX.plane_material = new THREE.MeshPhongMaterial( {ambient: 0x333333, color: 0xffffff, specular: 0x000000, shininess: 0} );
+    GFX.cube_material = new THREE.MeshPhongMaterial( {
+        ambient: 0x000000, 
+        color: 0xffffaa, 
+        specular: 0xa0a010, 
+        shininess: 300
+    } );
+    GFX.plane_material = new THREE.MeshPhongMaterial( {
+        ambient: 0x000000, 
+        color: 0x808040, 
+        specular: 0x000000, 
+        shininess: 100
+    } );
 
     GFX.light1 = new THREE.SpotLight(0xFFFFFF);
-    GFX.light2 = new THREE.SpotLight(0xFFFFFF);
 
-    //GFX.light.position.x = -250;
-    //GFX.light.position.y = 200;
-    //GFX.light.position.z = 450;
-
-    GFX.light1.intensity = 0.5; // modulate this
+    GFX.light1.intensity = 0; // modulate this
     GFX.light1.castShadow = true;
-    GFX.light1.position.set(-200,450,-60);
+    GFX.light1.position.set(0,600,800);
     
-    GFX.light2.castShadow = true;
-    GFX.light2.intensity = 0.5; // modulate this
-    GFX.light2.position.set(200,450,-60);
-
     GFX.cube_mesh = new THREE.Mesh( GFX.cube_geometry, GFX.cube_material );
     GFX.cube_mesh.castShadow = true;
+    GFX.cube_mesh.position.z = 250;
+    GFX.cube_mesh.position.y = -50;
     GFX.plane_mesh = new THREE.Mesh( GFX.plane_geometry, GFX.plane_material);
     GFX.plane_mesh.rotation.x = -1.5;
     GFX.plane_mesh.position.y = -400;
@@ -51,8 +57,11 @@ GFX.initialize = function() {
     GFX.scene.add( GFX.cube_mesh );
     GFX.scene.add(GFX.plane_mesh);
     GFX.scene.add(GFX.light1);
-    GFX.scene.add(GFX.light2);
+    //GFX.scene.add(GFX.light2);
     GFX.scene.fog = new THREE.Fog( 0x000000, 700, 3000 );
+
+    GFX.createParticles();
+    GFX.scene.add(GFX.particleSystem);
 
     GFX.renderer = new THREE.WebGLRenderer();
     GFX.renderer.shadowMapEnabled = true;
@@ -61,13 +70,47 @@ GFX.initialize = function() {
     document.body.appendChild( GFX.renderer.domElement );
 }
 
+GFX.createParticles = function() {
+    GFX.particles = new THREE.Geometry();
+    GFX.particlesMaterial = new THREE.ParticleBasicMaterial({
+        color: 0x666666,
+        size: 130,
+        map: THREE.ImageUtils.loadTexture(
+            "particle.png"
+            ),
+        blending: THREE.AdditiveBlending,
+        transparent: true
+    });
+    var pX, pY, pZ, particle;
+    //var theta;
+    //var length;
+    for(var p = 0; p < GFX.particleCount; p++) {
+        pY = Math.random() * 4000 - 2000;
+        pX = Math.random() * 4000 - 2000;
+        pZ = 0;
+        /*theta = Math.random() * Math.PI * 2;
+        length = 1;//Math.random();
+        pX = Math.cos(theta) * 400 * length;
+        pZ = Math.sin(theta) * 400 * length;
+        pY = 0;*/
+        particle = new THREE.Vertex(new THREE.Vector3(pX, pY, pZ));
+        GFX.particles.vertices.push(particle);
+    }
+    GFX.particleSystem = new THREE.ParticleSystem(GFX.particles, GFX.particlesMaterial);
+    GFX.particleSystem.rotation.x = -1.5;
+    GFX.particleSystem.position.y = 380;
+    GFX.particleSystem.sortParticles = true;
+    GFX.particleSystem.castShadow = false;
+    GFX.particleSystem.receiveShadow = false;
+}
+
+
 GFX.render = function() {
-
-    GFX.cube_mesh.rotation.x += 0.01;
-    GFX.cube_mesh.rotation.y += 0.02;
-
-    GFX.light1.intensity = (GFX.light1.intensity + 0.01) % 1;
-    GFX.light2.intensity = (GFX.light1.intensity + 0.01) % 1;
+    
+    GFX.cube_mesh.rotation.x += 0.0025;
+    GFX.cube_mesh.rotation.y += 0.005;
+   
+    GFX.particleSystem.rotation.z += 0.001;
 
     GFX.renderer.render( GFX.scene, GFX.camera );
 
