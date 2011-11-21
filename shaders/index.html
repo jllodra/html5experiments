@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>shader test in threejs</title>
+
+        <script type="text/javascript" src="Three.js"></script>
+
+        <style>
+            body {
+                overflow: hidden;
+                background-color: #111;
+                font-family: Helvetica, Sans-serif;
+                color: #eee;
+                text-align: center;
+            }
+            #header {
+                position: absolute;
+                width: 100%;
+                z-index: 10;
+            }
+            a {
+                color: slategray;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div id="header">
+            Shader test<br/><br/>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="josep_llodra"></a>
+            <g:plusone size="medium"></g:plusone><br/><br/>
+            <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+            <script type="text/javascript">
+                (function() {
+                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                    po.src = 'https://apis.google.com/js/plusone.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                })();
+            </script>
+            <script>
+                var _gaq=[['_setAccount','UA-2057916-3'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
+                (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+                    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+                    s.parentNode.insertBefore(g,s)}(document,'script'));
+            </script>
+        </div>
+
+        <!-- Shaders -->
+        <script type="x-shader/x-vertex" id="vertexShader">
+
+            // switch on high precision floats
+            #ifdef GL_ES
+            precision highp float;
+            #endif
+
+            uniform float time;
+            varying float h;
+
+            void main()
+            {
+                vec3 v = position;
+                
+                //v.z = 100.0*cos(4.0*v.x - 3.0*time);
+                
+                v.z = sin(4.0*v.x + (time))*100.0;               
+                h = abs(v.z)/100.0;
+                
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(v,1.0);
+            }
+
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentShader">
+
+            #ifdef GL_ES
+            precision highp float;
+            #endif
+
+            varying float h;
+            
+            void main()
+            {
+                gl_FragColor = vec4(0.05,0.05,h,1.0);
+            }
+
+        </script>
+
+        <!-- End Shaders -->
+
+        <script>
+            
+            var camera,
+            plane_geometry,
+            plane_material,
+            plane_mesh,
+            uniforms,
+            shader_material,
+            scene,
+            renderer;
+                                       
+            if ( !window.requestAnimationFrame ) {
+                window.requestAnimationFrame = ( function() {
+                    return window.webkitRequestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        window.oRequestAnimationFrame ||
+                        window.msRequestAnimationFrame ||
+                        function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+                        window.setTimeout( callback, 1000 / 60 );
+                    };
+                } )();
+            }
+            
+            camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+            camera.position.z = 3000;
+            camera.position.x = 3000;
+            camera.position.y = 3000;
+            camera.lookAt(new THREE.Vector3(0,0,0)); // useless if you use controls  
+                
+            plane_geometry = new THREE.PlaneGeometry(8000, 8000, 40, 40); // 100, 100
+                        
+            uniforms = {
+                time: { type: "f", value: 1.0 }
+            };
+            
+            shader_material = new THREE.ShaderMaterial({
+                uniforms: uniforms,
+                vertexShader: document.getElementById( 'vertexShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            });
+            
+            plane_mesh = new THREE.Mesh(plane_geometry, shader_material);
+                       
+            plane_mesh.rotation.x = -Math.PI/2;
+
+            scene = new THREE.Scene();
+            
+            scene.add(plane_mesh);
+            scene.add(camera);
+
+            //debugaxes();
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+                        
+            document.body.appendChild( renderer.domElement );
+
+            var t = 0;
+            var x = 0;
+
+            function render() {
+
+
+                //t = Math.sin(x);
+                
+                //x += 0.1;
+
+                //uniforms.time.value = t;
+
+                uniforms.time.value += 0.02;
+
+                plane_mesh.rotation.z += 0.001;
+
+                renderer.render( scene, camera );
+
+            }
+            
+            function animate() {
+                
+                requestAnimationFrame(animate);
+                render();
+                
+            }
+            
+            animate();
+                
+        </script>
+    </body>
+
+</html>
+

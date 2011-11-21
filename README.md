@@ -29,6 +29,13 @@ fast Fourier transform experiments with chrome's webaudio api + three.js
  * http://herotyc.untergrund.net/darkfastft
  * http://herotyc.untergrund.net/firering
 
+stokes drift
+------------
+
+stokes drift for water waves (George Gabriel Stokes in 1847) using vertex/fragment shaders
+
+ * http://herotyc.untergrund.net/shaders/
+
 --- 
 
 Experiments licensed under GPLv3
