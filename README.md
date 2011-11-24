@@ -36,6 +36,11 @@ stokes drift for water waves (George Gabriel Stokes in 1847) using vertex/fragme
 
  * http://herotyc.untergrund.net/shaders/
 
+glsl-sandbox shaders
+--------------------
+
+ * http://glsl.heroku.com/362/1
+
 --- 
 
 Experiments licensed under GPLv3
