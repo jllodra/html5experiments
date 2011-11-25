@@ -41,6 +41,8 @@ glsl-sandbox shaders
 
  * http://glsl.heroku.com/362/1
  * http://glsl.heroku.com/388/0
+ * http://glsl.heroku.com/388/1
+ * http://glsl.heroku.com/388/3
 
 --- 
 
