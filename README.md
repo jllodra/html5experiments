@@ -46,5 +46,12 @@ glsl-sandbox shaders
 
 --- 
 
+morping particles
+-----------------
+
+cube, helix, plane, sphere morphs
+
+ * http://herotyc.untergrund.net/morph
+
 Experiments licensed under GPLv3
 Josep Llodrà (jlg.hrtc@gmail.com)
