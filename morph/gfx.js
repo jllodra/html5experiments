@@ -11,7 +11,7 @@ GFX.plane_material = null;
 GFX.plane_mesh = null;
 GFX.light1 = null;
 
-GFX.particleCount = 512; // que tenga raiz cuadrada entera.
+GFX.particleCount = 512;
 GFX.particles = null;
 GFX.particlesMaterial = null;
 GFX.particleSystem = null;
@@ -131,11 +131,15 @@ GFX.createParticles = function() {
 GFX.particlesMorph = function() {
 
     for(var p = 0; p < GFX.particleCount; p++) {
+        // I know I could do this better but I don't have the time
         particle = GFX.particleSystem.geometry.vertices[p];
         if(particle.position.x > (GFX.destinationPositions[p][0] + GFX.morphVel)) {
             particle.position.x -= GFX.morphVel;
         } else if(particle.position.x <= (GFX.destinationPositions[p][0] - GFX.morphVel)){
             particle.position.x += GFX.morphVel;
+        }
+        if(Math.abs(particle.position.x - GFX.destinationPositions[p][0]) <= GFX.morphVel) {
+            particle.position.x = GFX.destinationPositions[p][0];
         }
 
         if(particle.position.y > (GFX.destinationPositions[p][1] + GFX.morphVel)) {
@@ -143,12 +147,18 @@ GFX.particlesMorph = function() {
         } else if(particle.position.y <= (GFX.destinationPositions[p][1] - GFX.morphVel)){
             particle.position.y += GFX.morphVel;
         }
-        
+        if(Math.abs(particle.position.y - GFX.destinationPositions[p][1]) <= GFX.morphVel) {
+            particle.position.y = GFX.destinationPositions[p][1];
+        }        
+
         if(particle.position.z > (GFX.destinationPositions[p][2] + GFX.morphVel)) {
             particle.position.z -= GFX.morphVel;
         } else if(particle.position.z <= (GFX.destinationPositions[p][2] - GFX.morphVel)){
             particle.position.z += GFX.morphVel;
         }
+        if(Math.abs(particle.position.z - GFX.destinationPositions[p][2]) <= GFX.morphVel) {
+            particle.position.z = GFX.destinationPositions[p][2];
+        }        
     }
 
 }
