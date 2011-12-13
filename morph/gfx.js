@@ -87,9 +87,9 @@ GFX.initialize = function() {
         }
     }, true);
     
-    GFX.morphs[(GFX.nextMorph++)%4]();
+    GFX.morphs[(GFX.nextMorph++)%5]();
     setInterval(function() {
-        GFX.morphs[(GFX.nextMorph++)%4]();
+        GFX.morphs[(GFX.nextMorph++)%5]();
     }, 10000);
 
 }
@@ -231,6 +231,26 @@ GFX.toCube = function() {
         
 }
 
+GFX.toSin = function() {
+    var size = 1000;
+    var m = GFX.particleCount;
+
+    var n = Math.sqrt(m);
+        
+    var p = 0;
+   
+    for(var i = 0; i < n; i++) {
+        var x = i * size/n;
+        for(var j = 0; j < n; j++) {
+            var z = j * size/n;
+            var y = Math.cos( ((Math.abs(x-size/2) + Math.abs(z-size/2)) / size) * Math.PI) * 300;
+            GFX.destinationPositions[p] = [x-(size/2), y, z-(size/2)]; // x y z
+            p++;        
+        }
+    }
+        
+}
+
 
 GFX.render = function() {
 
@@ -292,4 +312,4 @@ function debugaxes(){
     }
 }
 
-GFX.morphs = [GFX.toSphere, GFX.toConicalHelix, GFX.toPlane, GFX.toCube];
+GFX.morphs = [GFX.toSphere, GFX.toConicalHelix, GFX.toPlane, GFX.toSin, GFX.toCube];
