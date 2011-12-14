@@ -11,7 +11,7 @@ GFX.plane_material = null;
 GFX.plane_mesh = null;
 GFX.light1 = null;
 
-GFX.particleCount = 512;
+GFX.particleCount = 529;
 GFX.particles = null;
 GFX.particlesMaterial = null;
 GFX.particleSystem = null;
@@ -87,9 +87,9 @@ GFX.initialize = function() {
         }
     }, true);
     
-    GFX.morphs[(GFX.nextMorph++)%5]();
+    GFX.morphs[(GFX.nextMorph++)%6]();
     setInterval(function() {
-        GFX.morphs[(GFX.nextMorph++)%5]();
+        GFX.morphs[(GFX.nextMorph++)%6]();
     }, 10000);
 
 }
@@ -97,7 +97,7 @@ GFX.initialize = function() {
 GFX.createParticles = function() {
     var particles = new THREE.Geometry();
     var particlesMaterial = new THREE.ParticleBasicMaterial({
-        color: 0xFF6666,
+        color: 0x2266FF,
         size: 300,
         map: THREE.ImageUtils.loadTexture(
             "particle.png"
@@ -228,7 +228,12 @@ GFX.toCube = function() {
             }
         }
     }
-        
+    
+    // dunno what to do with these points
+    while(p < m) {
+       GFX.destinationPositions[p++] = [size/2.25 - (size/2.25), size/2.25 - (size/3), size/2.25 - (size/2.25)]; // x y z
+    }
+    
 }
 
 GFX.toSin = function() {
@@ -249,6 +254,26 @@ GFX.toSin = function() {
         }
     }
         
+}
+
+GFX.toTorus = function() {
+    var r = 200;
+    var R = 400;
+    var m = GFX.particleCount;
+    
+    var n = Math.sqrt(m);
+       
+    var p = 0;
+    
+    for(var i = 0; i < n; i++) {
+        for(var j = 0; j < n; j++) {           
+            var x = Math.cos((j/n)*Math.PI*2) * (R + r*Math.cos((i/n)*Math.PI*2));
+            var y = Math.sin((j/n)*Math.PI*2) * (R + r*Math.cos((i/n)*Math.PI*2));
+            var z = r * Math.sin((i/n)*Math.PI*2);
+            GFX.destinationPositions[p] = [x, y, z]; // x y z
+            p++;             
+        }
+    }
 }
 
 
@@ -312,4 +337,4 @@ function debugaxes(){
     }
 }
 
-GFX.morphs = [GFX.toSphere, GFX.toConicalHelix, GFX.toPlane, GFX.toSin, GFX.toCube];
+GFX.morphs = [GFX.toTorus, GFX.toSphere, GFX.toConicalHelix, GFX.toPlane, GFX.toSin, GFX.toCube];
