@@ -8,17 +8,19 @@ body {
     text-align: center;
 }
 
-body.experience {
+#container {
     -webkit-perspective: 1200;
     -moz-perspective: 1200;
     -o-perspective: 1200;
     -ms-perspective: 1200;
     perspective: 1200;
+    -webkit-perspective-origin: 50% 50%;
+    -webkit-transform-style: preserve-3d;
     -webkit-transform: scale(0.9);
     -moz-transform: scale(0.9);
     -o-transform: scale(0.9);
     -ms-transform: scale(0.9);
-    transform: scale(0.9);    
+    transform: scale(0.9);  
 }
 
 body, button { font-family: sans-serif; color: #CCC; background-color: #000; }

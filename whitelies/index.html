@@ -73,10 +73,10 @@
                 if($.browser.webkit) {
                     WL.log("webkit detected");
                     $('#button').toggleClass('hidden');
-                    $('body').append('<video id="video" class="hidden" preload>'+
+                    $('body').append('<div id="container"><video id="video" class="hidden" preload>'+
                         '<source src="video/video.webm" type="video/webm" />' +
                         'Your browser does not support the video tag.' +
-                        '</video>');
+                        '</video></div>');
                     WL.initialize(0);
                 }
             }, false);

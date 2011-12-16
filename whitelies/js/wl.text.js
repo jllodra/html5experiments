@@ -1,7 +1,7 @@
 WL.Text = {};
 
 WL.Text.fire = function() {
-    $('body').append('<p class="' + WL.Queue.currentEvent + '">' + WL.Queue.getCurrentEventText() + '</p>');
+    $('#container').append('<p class="' + WL.Queue.currentEvent + '">' + WL.Queue.getCurrentEventText() + '</p>');
     var t = $('.' + WL.Queue.currentEvent);
     
     var left = Math.round(window.innerWidth/(Math.random()*2 + 3)  + (Math.random()-1) * window.innerWidth/10);

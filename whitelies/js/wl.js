@@ -39,7 +39,6 @@ WL.initialize = function(startTime) {
 };
 
 WL.StartExperience = function() {
-    $('body').addClass('experience');
     WL.video.toggleClass('hidden');
     WL.setFullscreen();
     WL.addRemoveScanlines();

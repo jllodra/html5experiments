@@ -9,15 +9,16 @@ WL.Mouse.initialize = function() {
         y = -y*105;
         var xorg = Math.round(e.pageX / window.innerWidth * 100);
         var yorg = Math.round(e.pageY / window.innerHeight * 100);
+        
         WL.video.css('-webkit-transform', 'rotateY(' + x + 'deg) rotateX(' + y + 'deg)');
         WL.video.css('-moz-transform', 'rotateY(' + x + 'deg) rotateX(' + y + 'deg)');
         WL.video.css('-o-transform', 'rotateY(' + x + 'deg) rotateX(' + y + 'deg)');
         WL.video.css('-ms-transform', 'rotateY(' + x + 'deg) rotateX(' + y + 'deg)');
         WL.video.css('transform', 'rotateY(' + x + 'deg) rotateX(' + y + 'deg)');
-        $('body').css('-webkit-transform', 'scale(' + scale + ')');
-        $('body').css('-moz-transform', 'scale(' + scale + ')');
-        $('body').css('-o-transform', 'scale(' + scale + ')');
-        $('body').css('-ms-transform', 'scale(' + scale + ')');
-        $('body').css('transform', 'scale(' + scale + ')');
+        $('#container').css('-webkit-transform', 'scale(' + scale + ')');
+        $('#container').css('-moz-transform', 'scale(' + scale + ')');
+        $('#container').css('-o-transform', 'scale(' + scale + ')');
+        $('#container').css('-ms-transform', 'scale(' + scale + ')');
+        $('#container').css('transform', 'scale(' + scale + ')');
     });
 };

@@ -8,8 +8,8 @@ p {
     user-select: none;   
     white-space: nowrap;
     position: absolute;
-    z-index: 1000;    
-    
+    z-index: 1000;
+        
     text-shadow: 0 0 24px #999, 0 0 4px #333, 1px 1px 10px #CCC;
     opacity: 0;
     -webkit-transition: all 2.5s ease-in-out;        
