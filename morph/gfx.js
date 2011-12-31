@@ -250,7 +250,7 @@ GFX.toSin = function() {
             var z = j * size/n;
             var y = Math.cos( ((Math.abs(x-size/2) + Math.abs(z-size/2)) / size) * Math.PI) * 300;
             GFX.destinationPositions[p] = [x-(size/2), y, z-(size/2)]; // x y z
-            p++;        
+            p++;
         }
     }
         
