@@ -51,6 +51,13 @@ cube, helix, plane, sphere morphs
 
  * http://herotyc.untergrund.net/morph
 
+fedde
+-----
+
+Filtering (classic VJing fx) on video canvas
+
+ * http://herotyc.untergrund.net/fedde
+
 ---
 
 Experiments licensed under GPLv3
