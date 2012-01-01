@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Realtime Image Processing</title>
+        <title>HTML5 Realtime Video/Image Processing</title>
 
         <style>
 
@@ -8,78 +8,101 @@
                 border: 0;
                 margin: 0;
                 padding: 0;
-                background-color: black;
+            }
+            
+            a {
+                color: white;
+            }
+            
+            a:visited {
+                color: white;
             }
 
             canvas {
+                background-color: black;
                 width: 100%;
                 height: 100%;
             }
 
             pre {
-                position: absolute;
-                top: 16px;
-                left: 16px;
-                width: auto;
                 background-color: #555;
                 margin: 4px;
                 padding: 8px;
                 border-radius: 16px;
+                color: #eee;
+            }
+
+            pre#filter {
+                position: absolute;
+                top: 60px;
+                left: 16px;
+                width: auto;
                 opacity: .2;
                 color: #eee;
                 -moz-transition: all .3s linear;
                 -webkit-transition: all .3s linear;
             }
 
-            pre:hover {
+            pre#filter:hover {
                 opacity: .7;
+                box-shadow: 0px 0px 8px 1px white;
                 -moz-transition: all .3s linear;
                 -webkit-transition: all .3s linear;
             }
 
         </style>
 
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
         <script type="text/javascript">
- 
+
+            requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
+                window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
             var can;
             var ctx;
             var vid;
-            var vidTimer;
             var pixData;
             var pixels;
-            var knobX = 75; // out of 100
             var current = 0;
  
             function init() {
+                /* Basic init */
                 vid = document.getElementById("vid");
                 can = document.getElementById("can");
                 ctx = can.getContext('2d');
-                //vid.addEventListener('ended', vidEnd, false);
-                vid.addEventListener('play', vidSet, false);
+                vid.addEventListener('canplay', function() {
+                    vid.play();
+                    showVid();
+                }, false);
                 document.getElementById('filter').innerHTML = process[current];
                 document.onkeydown = function(e) {
-                    if(e.which == 32) current = (current+1)%process.length;
+                    if(e.which == 32) {
+                        current = (current+1)%process.length;
+                    }
                     document.getElementById('filter').innerHTML = process[current];
                 }
-                showVid();
             }
- 
-            function vidSet() {
-                clearTimeout(vidTimer);
-                vidTimer = setTimeout("showVid()", 0);
-            }
- 
+  
             function showVid() {
+                /* Main loop */
                 ctx.drawImage(vid, 0,0);
-                
                 process[current]();
-                
-                if (!document.querySelector("video").paused)
-                // Repeat 40 times a second to oversample 30 fps video
-                    vidTimer = setTimeout("showVid()", 0);
+                if(!document.getElementById('vid').paused) {
+                    requestAnimationFrame(showVid);
+                }
             }
 
-            var processImage_Invert = function() {
+
+            /* FILTERS */
+            
+
+            var processImage_Original = function() { // ORIGINAL
+                pixels=ctx.getImageData(0,0,can.width,can.height);
+                ctx.putImageData(pixels,0,0);
+            }
+
+            var processImage_Invert = function() { // INVERT
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -92,7 +115,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_Threshold = function() {
+            var processImage_Threshold = function() { // THRESHOLD
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -105,7 +128,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_Grayscale = function() {
+            var processImage_Grayscale = function() { // GRAYSCALE
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -117,7 +140,7 @@
                 ctx.putImageData(pixels,0,0);
             }
             
-            var processImage_Sepia= function() {
+            var processImage_Sepia= function() { // SEPIA
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -129,7 +152,7 @@
                 ctx.putImageData(pixels,0,0);
             }
  
-            var processImage_Posterize = function() {
+            var processImage_Posterize = function() { // POSTERIZE/CUTOFF
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -143,7 +166,94 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_Chromium = function() {
+            var processImage_RuttEtra = function() { // RUTT-ETRA
+                pixels=ctx.getImageData(0,0,can.width,can.height);
+                pixData=pixels.data;
+                var step = 4;
+                for (y=0; y < can.height; y++) {
+                    for (x=0; x < can.width; x++) {
+                        if(y % step == 0) {
+                            var lum = pixData[(y*can.width+x)*4]*0.34;
+                            lum += pixData[(y*can.width+x)*4 + 1]*0.5;
+                            lum += pixData[(y*can.width+x)*4 + 2]*0.16;
+                            var z = Math.round(lum / 16);
+                            var newy = Math.max(0, y-z);
+                            pixData[(newy*can.width+x)*4] = pixData[(y*can.width+x)*4];
+                            pixData[(newy*can.width+x)*4 + 1] = pixData[(y*can.width+x)*4 + 1];
+                            pixData[(newy*can.width+x)*4 + 2] = pixData[(y*can.width+x)*4 + 2];
+                        }
+                        pixData[(y*can.width+x)*4] = 0;
+                        pixData[(y*can.width+x)*4 + 1] = 0;
+                        pixData[(y*can.width+x)*4 + 2] = 0;
+                    }
+                }
+                pixels.data = pixData;
+                ctx.putImageData(pixels,0,0);
+            }
+
+            var processImage_Scanlines = function() { // SCANLINES
+                pixels=ctx.getImageData(0,0,can.width,can.height);
+                pixData=pixels.data;
+                for (y=0; y < can.height; y+=2) {
+                    for (x=0; x < can.width; x++) {
+                        pixData[(y*can.width+x)*4] = 0;
+                        pixData[(y*can.width+x)*4 + 1] = 0;
+                        pixData[(y*can.width+x)*4 + 2] = 0;
+                    }
+                }
+                pixels.data = pixData;
+                ctx.putImageData(pixels,0,0);
+            }
+
+            var processImage_Dither = function() { // Floyd Steinberg DITHER
+                pixels=ctx.getImageData(0,0,can.width,can.height);
+                pixData=pixels.data;
+                for (y=0; y < can.height; y++) {
+                    for (x=0; x < can.width; x++) {
+                        var newPix = [];
+                        var oldPixAvg = pixData[(y*can.width+x)*4];
+                        oldPixAvg += pixData[(y*can.width+x)*4+1];
+                        oldPixAvg += pixData[(y*can.width+x)*4+2];
+                        oldPixAvg /= 3;
+                        newPix[0] = Math.floor(pixData[(y*can.width+x)*4] / 192) * 192;
+                        newPix[1] = Math.floor(pixData[(y*can.width+x)*4+1] / 192) * 192;
+                        newPix[2] = Math.floor(pixData[(y*can.width+x)*4+2] / 192) * 192;
+                        var newPixAvg = newPix[0] + newPix[1] + newPix[2] / 3;
+                        var quantError = oldPixAvg - newPixAvg;
+                        var q1 = .5 * quantError;
+                        /*var q1 = 7/16 * quantError;
+                        var q2 = 3/16 * quantError;
+                        var q3 = 5/16 * quantError;
+                        var q4 = 1/16 * quantError;*/
+                        var i = (y*can.width+x)*4;
+                        pixData[i] = newPix[0];
+                        pixData[i + 1] = newPix[1];
+                        pixData[i + 2] = newPix[2];
+
+                        pixData[i+4] = pixData[i+4] + q1;
+                        pixData[i+5] = pixData[i+5] + q1;
+                        pixData[i+6] = pixData[i+6] + q1;
+
+                        // IT WAS TOO SLOW TO DIFFUSE BY ALL NEIGHBORS 
+
+                        /*pixData[i + can.width*4 - 4] = pixData[i + can.width*4 - 4] + q2;
+                        pixData[i + can.width*4 - 3] = pixData[i + can.width*4 - 3] + q2;
+                        pixData[i + can.width*4 - 2] = pixData[i + can.width*4 - 2] + q2;
+                        
+                        pixData[i + can.width*4] = pixData[i + can.width*4] + q3;
+                        pixData[i + can.width*4 + 1] = pixData[i + can.width*4 + 1] + q3;
+                        pixData[i + can.width*4 + 2] = pixData[i + can.width*4 + 2] + q3;
+                        
+                        pixData[i + can.width*4 + 4] = pixData[i + can.width*4 + 4] + q4;
+                        pixData[i + can.width*4 + 5] = pixData[i + can.width*4 + 5] + q4;
+                        pixData[i + can.width*4 + 6] = pixData[i + can.width*4 + 6] + q4;*/
+                    }
+                }
+                pixels.data = pixData;
+                ctx.putImageData(pixels,0,0);
+            }
+
+            var processImage_Chromium = function() { // CHROMIUM
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -156,7 +266,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_ColorizeR = function() {
+            var processImage_ColorizeR = function() { // COLORIZE RED
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -168,7 +278,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_ColorizeG = function() {
+            var processImage_ColorizeG = function() { // COLORIZE GREEN
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -180,7 +290,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_ColorizeB = function() {
+            var processImage_ColorizeB = function() { // COLORIZE BLUE
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 var wh = can.width * can.height;
@@ -192,7 +302,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_Pixelate = function() { 
+            var processImage_Pixelate = function() { // PIXELATE
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 
@@ -253,13 +363,11 @@
                         sum[2] += pixData[(j*can.width + i)*4 + 2];
                     }
                 }
-                // put modified data back into image object
                 pixels.data = pixData;
-                // blit modified image object to screen
                 ctx.putImageData(pixels,0,0);
             }
  
-            var processImage_AlphaThreshold = function() {
+            var processImage_AlphaThreshold = function() { // ALPHA THRESHOLD
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
                 for (i=0; i < can.width * can.height; i++) {
@@ -271,7 +379,7 @@
                 ctx.putImageData(pixels,0,0);
             }
             
-            var processImage_Blur = function() {
+            var processImage_Blur = function() { // DENOISE
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
 
@@ -307,7 +415,7 @@
                 ctx.putImageData(pixels,0,0);
             }
  
-            var processImage_Sharpen = function() {
+            var processImage_Sharpen = function() { // SHARPEN
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
 
@@ -343,43 +451,7 @@
                 ctx.putImageData(pixels,0,0);
             }
  
-            var processImage_EdgeEnhance = function() {
-                pixels=ctx.getImageData(0,0,can.width,can.height);
-                pixData=pixels.data;
-
-                var conv = [ 0, 0, 0,
-                        -1, 1, 0,
-                    0, 0, 0 ];
-
-                for(var y = 0; y < can.height; y++) {
-                    for(var x = 0; x < can.width; x++) {
-                        var sy = y;
-                        var sx = x;
-                        var r=0, g=0, b=0;
-                        for(var cy=0; cy<3; cy++) {
-                            for(var cx=0; cx<3; cx++) {
-                                var scy = sy + cy - 0;
-                                var scx = sx + cx - 0;
-                                if(scy >=0 && scy < can.height && scx >= 0 && scx < can.width) {
-                                    var offset = (scy*can.width+scx)*4;
-                                    var wt = conv[cy*3+cx];
-                                    r += pixData[offset] * wt;
-                                    g += pixData[offset+1] * wt;
-                                    b += pixData[offset+2] * wt;
-                                }
-                            }
-                        }
-                        var dstoffset = (y*can.width + x)*4;
-                        pixData[dstoffset] = r;
-                        pixData[dstoffset+1] = g;
-                        pixData[dstoffset+2] = b;
-                    }
-                }
-                pixels.data = pixData;
-                ctx.putImageData(pixels,0,0);
-            }
-
-            var processImage_Sobel = function() {
+            var processImage_Sobel = function() { // SOBEL
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
 
@@ -415,7 +487,7 @@
                 ctx.putImageData(pixels,0,0);
             }
             
-            var processImage_EdgeDetect = function() { // Laplace
+            var processImage_EdgeDetect = function() { // LAPLACE
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
 
@@ -451,13 +523,15 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_Emboss = function() {
+            var processImage_Emboss = function() { // EMBOSS
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
 
-                var conv = [ -2, -1, 0,
+                var conv = [ 
+                        -2, -1, 0,
                         -1, 1, 1,
-                    0, 1, 2 ];
+                    0, 1, 2
+                ];
 
                 for(var y = 0; y < can.height; y++) {
                     for(var x = 0; x < can.width; x++) {
@@ -487,7 +561,7 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var processImage_Gauss = function() {
+            var processImage_Gauss = function() { // GLOW/GAUSSIAN BLUR
                 pixels=ctx.getImageData(0,0,can.width,can.height);
                 pixData=pixels.data;
 
@@ -523,20 +597,79 @@
                 ctx.putImageData(pixels,0,0);
             }
 
-            var process = [processImage_AlphaThreshold, processImage_Chromium, processImage_Sobel, processImage_Gauss, processImage_Emboss, processImage_EdgeDetect, processImage_EdgeEnhance, processImage_Blur, processImage_Sharpen, processImage_Posterize, processImage_Sepia, processImage_Invert, processImage_Pixelate, processImage_ColorizeB, processImage_ColorizeG, processImage_ColorizeR, processImage_Grayscale, processImage_Threshold];
+            /* FX FUNCTIONS, add new functions here */
+
+            var process = [
+                processImage_Original,
+                processImage_RuttEtra,
+                processImage_Scanlines, 
+                processImage_Sobel, 
+                processImage_AlphaThreshold, 
+                processImage_Chromium, 
+                processImage_Gauss, 
+                processImage_Blur, 
+                processImage_Posterize,
+                processImage_Dither,                
+                processImage_Sepia, 
+                processImage_Invert, 
+                processImage_Pixelate, 
+                processImage_ColorizeB, 
+                processImage_Emboss, 
+                processImage_ColorizeG, 
+                processImage_EdgeDetect, 
+                processImage_ColorizeR, 
+                processImage_Sharpen, 
+                processImage_Grayscale, 
+                processImage_Threshold
+            ];
  
         </script>
     </head>
 
-    <body onload="init()">
+    <body>
 
-        <pre id="filter"></pre>
+        <pre id="filter" class="code"></pre>
 
-        <canvas id="can" height="270" width="480">
+        <canvas id="can" height="360" width="640">
         </canvas>
 
-        <video src="fedde.webm" autoplay loop id="vid" style="display: none">
+        <video preload="auto" loop id="vid" style="display: none">
+            <source src='fedde.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
+            <source src='fedde.ogv' type='video/ogg; codecs="theora, vorbis"'/>
+            <source src='fedde.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
         </video>
+
+        <div id="info" style="position: absolute; top: 16px; left: 16px; background: none;">
+            <pre style="display: inline-block;">Press SPACE to change FX</pre>
+            <pre style="display: inline-block;"><a style="margin: 0; border: 0; padding: 0;" href="https://github.com/jllodra/html5experiments">Github</a> Feel free to fork, modify, add, optimize effects.</pre>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="josep_llodra"></a>
+            <g:plusone size="medium"></g:plusone><br/><br/>
+            <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+            <script type="text/javascript">
+                (function() {
+                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                    po.src = 'https://apis.google.com/js/plusone.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                })();
+            </script>
+            
+            <!-- Google analytics code for my site -->
+            
+            <script>
+                var _gaq=[['_setAccount','UA-2057916-3'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
+                (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+                    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+                    s.parentNode.insertBefore(g,s)}(document,'script'));
+            </script>
+
+        </div>
+
+
+        <script>
+            $(document).ready(function(){
+                init();
+            });
+        </script>
 
     </body>
 </html>
