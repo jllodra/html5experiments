@@ -71,7 +71,7 @@
                 vid = document.getElementById("vid");
                 can = document.getElementById("can");
                 ctx = can.getContext('2d');
-                vid.addEventListener('canplay', function() {
+                vid.addEventListener('canplaythrough', function() {
                     vid.play();
                     showVid();
                 }, false);
