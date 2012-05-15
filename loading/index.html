@@ -1,0 +1,104 @@
+<html>
+<head>
+	<style>
+	body {
+		margin:0;
+		padding:0;
+		background-color: black;
+	}
+	div#center {
+		position: absolute;
+		margin: 0 auto;
+		top: 30%;
+		left: 40%;
+		height: 700px;
+
+	}
+
+	div#center span {
+		position: relative;
+		font-family: Helvetica;
+		font-size: 32px;
+		font-weight: bolder;
+		color: inherit;
+	}
+
+	@-webkit-keyframes janimation {
+		0% {
+			-webkit-transform: rotate(0deg) scale(1.5);
+			color: #aaa;
+		}
+		10% {
+			-webkit-transform: rotate(0deg) scale(1.7);
+			color: #ccc;
+		}
+		100% {
+			-webkit-transform: rotate(0deg) scale(1.2);
+			/*color: #333;*/
+			color: transparent;
+			text-shadow: #666 0 0 10px;
+		}
+	}
+
+	div#center div {
+		position: relative;
+		display: inline-block;
+		-webkit-animation: janimation 2.2s infinite;
+	}
+
+	div#center div.letter_container_1 {
+		-webkit-animation-delay: 0s;		
+	}	
+
+	div#center div.letter_container_2 {
+		-webkit-animation-delay: .2s;		
+	}	
+
+	div#center div.letter_container_3 {
+		-webkit-animation-delay: .4s;		
+	}	
+
+	div#center div.letter_container_4 {
+		-webkit-animation-delay: .6s;		
+	}	
+
+	div#center div.letter_container_5 {
+		-webkit-animation-delay: .8s;		
+	}	
+
+	div#center div.letter_container_6 {
+		-webkit-animation-delay: 1s;		
+	}	
+	div#center div.letter_container_7 {
+		-webkit-animation-delay: 1.2s;		
+	}	
+
+
+	</style>
+</head>
+	<body>
+		<div id="center">
+			<div class="letter_container_1">
+				<span>L</span>
+			</div>
+			<div class="letter_container_2">
+				<span>O</span>
+			</div>
+			<div class="letter_container_3">
+				<span>A</span>
+			</div>
+			<div class="letter_container_4">
+				<span id="D">D</span>
+			</div>
+			<div class="letter_container_5">
+				<span>I</span>
+			</div>
+			<div class="letter_container_6">
+				<span>N</span>
+			</div>
+			<div class="letter_container_7">
+				<span>G</span>
+			</div>
+		</div>
+	</body>
+</html>
