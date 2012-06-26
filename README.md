@@ -58,6 +58,13 @@ Filtering (classic VJing fx) on video canvas
 
  * http://herotyc.untergrund.net/fedde
 
+css filters
+-----------
+
+using -webkit-filter
+
+ * http://herotyc.untergrund.net/cssfilters
+
 ---
 
 Experiments licensed under GPLv3
