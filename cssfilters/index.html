@@ -10,10 +10,16 @@
 			padding: 30px;
 			width: 450px;
 		}
+		.custom { -webkit-filter: custom(
+                     url(distort.vs) url(tint.fs), 
+                     distortAmount 0.5, lightVector 1.0 1.0 0.0, 
+                     disp texture(disp.png)
+                  );
+		}
 	</style>
 </head>
 <body>
-	<video src="michael_jackson_-_earth_song_640x456.mp4" autoplay>
+	<video class="custom" src="michael_jackson_-_earth_song_640x456.mp4" autoplay>
 	<p>Your browser can't play this video.</p>
 	</video>
 	<div id="controls">

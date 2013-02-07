@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<video width="320" height="200" autoplay></video>
+	<img width="320" height="200" src=""/>
+	<canvas width="320" height="200" style="display:none;"></canvas>
+	
+	<script>
+	
+	var video = document.querySelector('video');
+	var canvas = document.querySelector('canvas');
+	var ctx = canvas.getContext('2d');
+	var globalLocalMediaStream = null;
+		
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia || navigator.msGetUserMedia;
+			window.URL = window.URL || window.webkitURL;
+
+		navigator.getUserMedia(
+			{video: true}, 
+			function(localMediaStream) { 
+	  	  		//video = document.createElement("video");
+	  			//video.autoplay = true;
+				video.src = window.URL.createObjectURL(localMediaStream);
+				globalLocalMediaStream = localMediaStream;
+	  	  		//document.body.appendChild(video);
+			}, 
+			function(error) {
+	  			console.log(error);
+			}
+		);
+		
+		function snapshot() {
+			if (globalLocalMediaStream) {
+				ctx.drawImage(video, 0, 0, 320, 200);
+				// could use image/webp
+				document.querySelector('img').src = canvas.toDataURL('image/png');
+			}
+			
+		}
+		
+		video.addEventListener('click', snapshot, false);
+		
+	</script>
+</body>
+</html>

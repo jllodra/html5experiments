@@ -43,6 +43,7 @@ glsl-sandbox shaders
  * http://glsl.heroku.com/388/0
  * http://glsl.heroku.com/388/1
  * http://glsl.heroku.com/388/3
+ * http://glsl.heroku.com/e#6585.0
 
 morping particles
 -----------------
